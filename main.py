@@ -4,7 +4,8 @@
 
 
 from lxml import html
-import requests
+from urllib.request import urlopen
+import time
 
 class Scraper:
 
@@ -13,7 +14,18 @@ class Scraper:
         self.end = end
         self.root = 'https://www.pornhub.com/video?o=mv&cc=us&page='
         self.xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "title", " " ))]//a'
+        self.links = list()
 
-    def scrape(self):
+    def get_videos(self):
 
-        for i in range(start, end + 1):
+        for i in range(self.start, self.end + 1):
+            video_url = self.root + str(i)
+            connection = urlopen(video_url)
+            dom = html.fromstring(connection.read())
+            z = [x for x in dom.xpath(self.xpath)]
+            z = [(z.get('href'), z.text) for z in z]
+            z = list(set(z))
+            self.links.extend(z)
+
+            if i != self.end:
+                time.sleep(3)
