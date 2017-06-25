@@ -1,6 +1,6 @@
 # ben armstrong
 # this project will scrape comments from the most popular videos on pornhub
-# after the comments are scraped, a twitter bot will post them randomly
+# not sure what to do with them afterwards
 
 
 from lxml import html
@@ -10,7 +10,7 @@ import json
 
 class Scraper:
 
-    def __init__(self, start=1, end=100):
+    def __init__(self, start=1, end=100, wait=5):
         self.start = start
         self.end = end
         self.root = 'https://www.pornhub.com/video?o=mv&cc=us&page='
@@ -18,6 +18,7 @@ class Scraper:
         self.links = list()
         self.comment_xpath = '//*[contains(concat( " ", @class, " " ), concat( " ", "commentMessage", " " ))]'
         self.comments = list()
+        self.wait = wait
 
     def get_videos(self):
 
@@ -32,7 +33,7 @@ class Scraper:
             self.links.extend(z)
 
             if i != self.end:
-                time.sleep(3)
+                time.sleep(self.wait)
 
     def get_comments(self):
 
@@ -50,12 +51,14 @@ class Scraper:
                 output = [(title, video, y)]
                 self.comments.extend(output)
 
-                time.sleep(3)
+                time.sleep(self.wait)
             except:
                 print('Video --{}-- failed'.format(title))
+                time.sleep(self.wait)
 
     def to_dict(self):
-        return {str(tup[0] + '|' + tup[1]): [item for item in tup[2] if 'commentMessage' not in item] for tup in s.comments}
+        return {str(tup[0] + '|' + tup[1]): [item for item in tup[2] if 'commentMessage' not in item]
+                for tup in s.comments}
 
     def to_json(self):
         x = self.to_dict()
