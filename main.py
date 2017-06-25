@@ -53,7 +53,7 @@ class Scraper:
 
                 time.sleep(self.wait)
             except:
-                print('Video --{}-- failed'.format(title))
+                print('!!!Video --{}-- failed'.format(title))
                 time.sleep(self.wait)
 
     def to_dict(self):
