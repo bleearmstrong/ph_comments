@@ -58,7 +58,7 @@ class Scraper:
 
     def to_dict(self):
         return {str(tup[0] + '|' + tup[1]): [item for item in tup[2] if 'commentMessage' not in item]
-                for tup in s.comments}
+                for tup in self.comments}
 
     def to_json(self):
         x = self.to_dict()
