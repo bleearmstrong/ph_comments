@@ -36,16 +36,20 @@ class Scraper:
     def get_comments(self):
 
         for i, link in enumerate(self.links):
-            title = link[1]
-            video = 'https://www.pornhub.com' + link[0]
-            print('parsing comments for video: {}'.format(title))
-            print('{} links remain'.format(len(self.links) - i))
-            connection = urlopen(video)
-            dom = html.fromstring(connection.read())
-            y = [x.text_content() for x in dom.xpath(self.comment_xpath)]
-            y = [str(x).strip('\n\t') for x in y]
-            y = [x[:x.index('\n\t')] for x in y]
-            output = [(title, video, y)]
-            self.comments.extend(output)
+            try:
+                title = link[1]
+                video = 'https://www.pornhub.com' + link[0]
+                print('parsing comments for video: {}'.format(title))
+                print('{} links remain'.format(len(self.links) - i))
+                connection = urlopen(video)
+                dom = html.fromstring(connection.read())
+                y = [x.text_content() for x in dom.xpath(self.comment_xpath)]
+                y = [str(x).strip('\n\t') for x in y]
+                y = [x[:x.index('\n\t')] for x in y]
+                output = [(title, video, y)]
+                self.comments.extend(output)
 
-            time.sleep(3)
+                time.sleep(3)
+            except:
+                pass
+
