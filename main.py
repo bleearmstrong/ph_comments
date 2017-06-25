@@ -51,5 +51,5 @@ class Scraper:
 
                 time.sleep(3)
             except:
-                pass
+                print('Video --{}-- failed'.format(title))
 
